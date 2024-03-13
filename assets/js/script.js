@@ -1,7 +1,19 @@
 const key = "d3ace9294eb8e7555ed6e509548b67cc";
 const userInputEl = $('#user-input');
 const btnEl = $('#btn');
-const recentSearch = "";
+let recentSearch = JSON.parse(localStorage.getItem("recentSearch")) || [];
+
+function readRecentSearch() {
+    let recentSearch = JSON.parse(localStorage.getItem('recentSearch'));
+    if (!recentSearch) {
+        recentSearch = [];
+    }
+    return recentSearch;
+}
+
+function saveRecentSearch(recentSearch) {
+    localStorage.setItem('recentSearch', JSON.stringify(recentSearch));
+}
 
 // This function grabs the weather for the city entered by the user
 function getWeather (event) {
@@ -13,6 +25,15 @@ function getWeather (event) {
 
     console.log(userInput);
     console.log(requestUrl);
+
+    if (!recentSearch) {
+        recentSearch = [];
+    }
+
+    if (!recentSearch.includes(userInput)) {
+        recentSearch.push(userInput);
+        saveRecentSearch(recentSearch);
+    }
 
     fetch(requestUrl).then(response => {
         if (!response.ok) {
@@ -30,11 +51,14 @@ function printResults(data) {
     console.log(data);
     // Reference for the icon
     const iconUrl = `https://openweathermap.org/img/wn/${data.list[0].weather[0].icon}.png`
+    const searchDate = dayjs.unix(`${data.list[0].dt}`);
+    const dateFormat = searchDate.format("MM/DD/YYYY");
+
     // Today's weather card section
     const resultsCard = `
     <div class="card">
         <div class="card-body">
-            <h3 class="card-text">${data.city.name}</h3>
+            <h3 class="card-text">${data.city.name}(${dateFormat})</h3>
             <img src="${iconUrl}" alt="Weather Condition Icon">
             <p class="card-text">Temp: ${data.list[0].main.temp}°F</p>
             <p class="card-text">Wind: ${data.list[0].wind.speed} mph</p>
@@ -45,13 +69,16 @@ function printResults(data) {
     // Five day forecast section
     let forecastCards = `<div class="card-group">`
     // For loop to get every eigh results (every 24 hours) and print them to a card group
-    for (let i = 0; i < 5; i++) {
+    for (let i = 1; i <= 4; i++) {
         const index = i * 8;
         const forecast = data.list[index];
+        const forecastDate = dayjs.unix(`${forecast.dt}`);
+        const forecastFormat = forecastDate.format("MM/DD/YYYY");
+        const forecastIcons = `https://openweathermap.org/img/wn/${data.list[i].weather[0].icon}.png`
         forecastCards += `
         <div class="card">
             <div class="card-body">
-                <h3 class="card-title">ADD TIME AND UPDATE ICON</h3>
+                <h3 class="card-title">${forecastFormat}</h3>
                 <img src="${iconUrl}" alt="Weather Condition Icon"></img>
                 <p class="card-text">Temp: ${forecast.main.temp}°F</p>
                 <p class="card-text">Wind: ${forecast.wind.speed} mph</p>
