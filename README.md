@@ -22,9 +22,9 @@ N/A
 Type in a city name and select the search button to gather weather results for the current day
 and the 5 days after that. All searches are saved locally to help with additional searches.
 
-    ```md
-    ![alt text](assets/images/screenshot.png)
-    ```
+
+![Image of the weather results](./assets/images/Screenshot-of-app.png)
+
 
 You can check it out here!
 
