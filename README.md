@@ -26,7 +26,7 @@ and the 5 days after that. All searches are saved locally to help with additiona
 ![Image of the weather results](./assets/images/Screenshot-of-app.png)
 
 
-You can check it out here!
+You can check it out [here!](https://enkw.github.io/c06-weather-dashboard/)
 
 ## Credits
 
