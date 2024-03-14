@@ -72,7 +72,9 @@ function printResults(data) {
     </div>`;
     $('#local-weather').html(resultsCard);
     // Five day forecast section
-    let forecastCards = `<div class="card-group">`
+    let forecastCards = `
+        <h2>Five Day Forecast</h2>
+            <div class="card">`
     // For loop to get every eigh results (every 24 hours) and print them to a card group
     for (let i = 1; i <= 4; i++) {
         const index = i * 8;

@@ -1,17 +1,13 @@
 # c06-weather-dashboard
 
-WHEN I click on a city in the search history
-THEN I am again presented with current and future conditions for that city
-
-
 ## Description
 
-Provide a short description explaining the what, why, and how of your project. Use the following questions as a guide:
+This project acts as a weather dashboard using the openweathermap api.
 
-- What was your motivation?
-- Why did you build this project? (Note: the answer is not "Because it was a homework assignment.")
-- What problem does it solve?
-- What did you learn?
+Working through this project has helped me feel more comfortable with JS in general,
+however it's showed me that I still have a lot to learn with anything that adjust the CSS.
+
+Disappointed with how the UI turned out, but hoping to get better at it with practice.
 
 ## Table of Contents (Optional)
 
@@ -23,9 +19,8 @@ N/A
 
 ## Usage
 
-Provide instructions and examples for use. Include screenshots as needed.
-
-To add a screenshot, create an `assets/images` folder in your repository and upload your screenshot to it. Then, using the relative filepath, add it to your README using the following syntax:
+Type in a city name and select the search button to gather weather results for the current day
+and the 5 days after that. All searches are saved locally to help with additional searches.
 
     ```md
     ![alt text](assets/images/screenshot.png)
@@ -35,11 +30,10 @@ You can check it out here!
 
 ## Credits
 
-List your collaborators, if any, with links to their GitHub profiles.
+Bootstrap, OpenWeatherMap, jQuery, dayjs, and Bryan Lebeuf for trying as hard as he could to help me
+understand the styling.
 
-If you used any third-party assets that require attribution, list the creators with links to their primary web presence in this section.
-
-If you followed tutorials, include links to those here as well.
+Ian Wolfe
 
 ## License
 
@@ -51,7 +45,11 @@ N/A
 
 ## Features
 
-If your project has a lot of features, list them here.
+Search for the current weather and a 5 day forecast using the search bar. All cities searched will 
+be saved locally to help you navigate back previous searches.
+
+In the future, I'd like to update this so that I can make sure the list only holds a set
+number of responses.
 
 ## How to Contribute
 
