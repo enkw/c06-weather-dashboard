@@ -1,46 +1,51 @@
 const key = "d3ace9294eb8e7555ed6e509548b67cc";
 const userInputEl = $('#user-input');
 const btnEl = $('#btn');
+const searchEl = $('#search-history');
 let recentSearch = JSON.parse(localStorage.getItem("recentSearch")) || [];
 
+// This function reads the local storage for previous searches
 function readRecentSearch() {
     let recentSearch = JSON.parse(localStorage.getItem('recentSearch'));
     if (!recentSearch) {
         recentSearch = [];
-    }
+    }  
     return recentSearch;
 }
 
+// This function saves recently searched for cities locally
 function saveRecentSearch(recentSearch) {
     localStorage.setItem('recentSearch', JSON.stringify(recentSearch));
 }
 
-// This function grabs the weather for the city entered by the user
-function getWeather (event) {
-// Look into why preventDefault throws errors when enabled
-    // event.preventDefault();
+// This function prints the previously searched cities
+function printSearchHistory() {
+    searchEl.empty();
+    recentSearch.forEach(city => {
+        const historyBtn = $(`<button class="btn btn-outline-primary">${city}</button>`);
+        historyBtn.on('click', () => {
+            getWeather(city);
+        });
+        searchEl.append(historyBtn);
+    });
+}
 
-    const userInput = userInputEl.val();
-    const requestUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${userInput}&appid=${key}&units=imperial`;
-
-    console.log(userInput);
-    console.log(requestUrl);
-
-    if (!recentSearch) {
-        recentSearch = [];
-    }
-
-    if (!recentSearch.includes(userInput)) {
-        recentSearch.push(userInput);
-        saveRecentSearch(recentSearch);
-    }
+// This function grabs the weather for the requested city
+function getWeather (cityName) {
+    const requestUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=${key}&units=imperial`;
 
     fetch(requestUrl).then(response => {
         if (!response.ok) {
             throw Error('Network response not found');
         }
         return response.json();
-    }).then(data => printResults(data))
+    }).then(data => { printResults(data);
+        if (!recentSearch.includes(cityName)) {
+            recentSearch.push(cityName);
+            saveRecentSearch(recentSearch);
+            printSearchHistory();
+        }
+    })
     .catch(error => {
         console.error('Error', error);
     });
@@ -58,7 +63,7 @@ function printResults(data) {
     const resultsCard = `
     <div class="card">
         <div class="card-body">
-            <h3 class="card-text">${data.city.name}(${dateFormat})</h3>
+            <h1 class="card-text">${data.city.name}(${dateFormat})</h1>
             <img src="${iconUrl}" alt="Weather Condition Icon">
             <p class="card-text">Temp: ${data.list[0].main.temp}°F</p>
             <p class="card-text">Wind: ${data.list[0].wind.speed} mph</p>
@@ -78,7 +83,7 @@ function printResults(data) {
         forecastCards += `
         <div class="card">
             <div class="card-body">
-                <h3 class="card-title">${forecastFormat}</h3>
+                <h2 class="card-title">${forecastFormat}</h2>
                 <img src="${iconUrl}" alt="Weather Condition Icon"></img>
                 <p class="card-text">Temp: ${forecast.main.temp}°F</p>
                 <p class="card-text">Wind: ${forecast.wind.speed} mph</p>
@@ -90,5 +95,13 @@ function printResults(data) {
     $('#forecast').html(forecastCards);
 };
 
+// Calling this function before anything else happens causes the search history buttons to appear on the page
+printSearchHistory();
+
 // Causes getWeather to run when the user clicks the "Search" button
-btnEl.on('click', getWeather);
+btnEl.on('click', function(event) {
+    event.preventDefault();
+    let userInput = userInputEl.val();
+    getWeather(userInput);
+    userInput = "";
+});
